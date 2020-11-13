@@ -14,6 +14,7 @@ import android.os.Build;
 import androidx.core.content.ContextCompat;
 
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -98,6 +99,12 @@ public class RNCameraView extends CameraView implements LifecycleEventListener, 
     themedReactContext.addLifecycleEventListener(this);
 
     addCallback(new Callback() {
+      @Override
+      public void onCameraCapture(CameraView cameraView, String path) {
+        Log.w("DUY_TAG", "onCameraCapture (callback) - path: " + path);
+        RNCameraViewHelper.emitCameraCaptureEvent(cameraView, path);
+      }
+
       @Override
       public void onCameraOpened(CameraView cameraView) {
         RNCameraViewHelper.emitCameraReadyEvent(cameraView);

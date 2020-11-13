@@ -16,6 +16,7 @@
 
 package com.google.android.cameraview;
 
+import android.content.Context;
 import android.media.CamcorderProfile;
 import android.view.View;
 import android.graphics.SurfaceTexture;
@@ -30,7 +31,7 @@ import java.util.Set;
 import java.util.SortedSet;
 
 
-abstract class CameraViewImpl {
+public abstract class CameraViewImpl {
 
     protected final Callback mCallback;
     protected final PreviewImpl mPreview;
@@ -100,6 +101,10 @@ abstract class CameraViewImpl {
 
     abstract void takePicture(ReadableMap options);
 
+    abstract void startLiveness(final Context context);
+
+    abstract void stopLiveness(final Context context);
+
     abstract boolean record(String path, int maxDuration, int maxFileSize,
                             boolean recordAudio, CamcorderProfile profile, int orientation, int fps);
 
@@ -147,7 +152,7 @@ abstract class CameraViewImpl {
 
     abstract public Size getPreviewSize();
 
-    interface Callback {
+    public interface Callback {
 
         void onCameraOpened();
 
@@ -164,6 +169,8 @@ abstract class CameraViewImpl {
         void onFramePreview(byte[] data, int width, int height, int orientation);
 
         void onMountError();
+
+        void onCameraCapture(String path);
     }
 
 }

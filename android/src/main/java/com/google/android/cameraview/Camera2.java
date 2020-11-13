@@ -47,6 +47,7 @@ import android.os.Looper;
 import android.os.Build;
 
 import com.facebook.react.bridge.ReadableMap;
+import com.me.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -567,6 +568,19 @@ class Camera2 extends CameraViewImpl implements MediaRecorder.OnInfoListener, Me
         } else {
             captureStillPicture();
         }
+    }
+
+    @Override
+    void startLiveness(final Context context) {
+        Log.w("DUY_TAG", "startLiveness in Camera2.java");
+        mCallback.onCameraCapture("startLiveness in Camera2.java");
+    }
+
+    @Override
+    void stopLiveness(Context context) {
+        if (context == null) return;
+        Utils.clearImageCache(context);
+        Log.w("DUY_TAG", "stopLiveness in Camera1.java");
     }
 
     @Override

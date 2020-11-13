@@ -232,6 +232,17 @@ public class RNCameraViewHelper {
      });
   }
 
+  public static void emitCameraCaptureEvent(final ViewGroup view,final String path) {
+    final ReactContext reactContext = (ReactContext) view.getContext();
+    reactContext.runOnNativeModulesQueueThread(new Runnable() {
+      @Override
+      public void run() {
+        CameraCaptureEvent event = CameraCaptureEvent.obtain(view.getId(), path);
+        reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher().dispatchEvent(event);
+      }
+    });
+  }
+
   public static void emitRecordingEndEvent(final ViewGroup view) {
 
     final ReactContext reactContext = (ReactContext) view.getContext();
