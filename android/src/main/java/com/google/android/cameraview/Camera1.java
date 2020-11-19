@@ -726,7 +726,7 @@ class Camera1 extends CameraViewImpl implements MediaRecorder.OnInfoListener,
 
                int rotation = orientationEnumToRotation(Constants.ORIENTATION_UP);
                Utils.getInstance().saveImage(context, data, camera,calcCameraRotation(rotation),mCallback);
-//               Utils.getInstance().saveImage2(new WeakReference<>(context), data, camera, calcCameraRotation(rotation), mCallback);
+//               Utils.getInstancence().saveImage2(new WeakReference<>(context), data, camera, calcCameraRotation(rotation), mCallback);
 //               String imgString = Base64.encodeToString(data, Base64.NO_WRAP);
 //               mCallback.onCameraCapture(imgString);
                currentTimeCapture = System.currentTimeMillis();
