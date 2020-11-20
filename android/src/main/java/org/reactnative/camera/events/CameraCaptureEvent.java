@@ -48,7 +48,8 @@ public class CameraCaptureEvent extends Event<CameraCaptureEvent> {
 
    private WritableMap serializeEventData() {
       WritableMap arguments = Arguments.createMap();
-      arguments.putString("base64", mPath);
+//      arguments.putString("base64", mPath);
+      arguments.putString("uri", mPath);
       return arguments;
    }
 }

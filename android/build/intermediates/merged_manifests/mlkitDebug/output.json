@@ -1,0 +1,1 @@
+[{"outputType":{"type":"MERGED_MANIFESTS"},"apkData":{"type":"MAIN","splits":[],"versionCode":-1,"enabled":true,"outputFile":"react-native-camera-mlkit-debug.aar","fullName":"mlkitDebug","baseName":"mlkit-debug"},"path":"../../library_manifest/mlkitDebug/AndroidManifest.xml","properties":{"packageId":"org.reactnative.camera","split":""}}]

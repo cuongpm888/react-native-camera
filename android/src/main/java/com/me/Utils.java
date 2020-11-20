@@ -165,35 +165,35 @@ public class Utils implements Handler.Callback {
          rectangle.left = 0;
          rectangle.right = size.width;
          ByteArrayOutputStream out2 = new ByteArrayOutputStream();
-         image.compressToJpeg(rectangle, 10, out2);
+         image.compressToJpeg(rectangle, 30, out2);
          byte[] imageBytes = out2.toByteArray();
 
-//         bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-//         bitmap = rotateBitmap(bitmap, rotateAngle);
-//
-//         File directory = getCacheDir(context.get());
-//         File photo = new File(directory, System.currentTimeMillis() + ".jpg");
-//
-//         try {
-//            FileOutputStream fos = new FileOutputStream(photo.getPath());
-//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-//
-//            fos.flush();
-//            fos.close();
-//
-//            out2.flush();
-//            out2.close();
-//         } catch (java.io.IOException e) {
-//            Log.e("PictureDemo", "Exception in photoCallback", e);
-//         }
-//
-//         mCallback.onCameraCapture(photo.getPath());
-//
-//
-//         bitmap.recycle();
-//         bitmap = null;
-         String imgString = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
-         mCallback.onCameraCapture(imgString);
+         bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+         bitmap = rotateBitmap(bitmap, rotateAngle);
+
+         File directory = getCacheDir(context.get());
+         File photo = new File(directory, System.currentTimeMillis() + ".jpg");
+
+         try {
+            FileOutputStream fos = new FileOutputStream(photo.getPath());
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+
+            fos.flush();
+            fos.close();
+
+            out2.flush();
+            out2.close();
+         } catch (java.io.IOException e) {
+            Log.e("PictureDemo", "Exception in photoCallback", e);
+         }
+
+         mCallback.onCameraCapture(photo.getPath());
+
+
+         bitmap.recycle();
+         bitmap = null;
+//         String imgString = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
+//         mCallback.onCameraCapture(imgString);
 
          return null;
       }
