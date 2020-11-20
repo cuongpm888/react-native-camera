@@ -26,6 +26,7 @@ import android.media.MediaActionSound;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Handler;
+import android.util.Base64;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
@@ -717,13 +718,17 @@ class Camera1 extends CameraViewImpl implements MediaRecorder.OnInfoListener,
       if (currentTimeCapture == -1) {
          currentTimeCapture = System.currentTimeMillis();
       }
+
       mCamera.setPreviewCallback(new Camera.PreviewCallback() {
          @Override
          public void onPreviewFrame(byte[] data, Camera camera) {
-            if (System.currentTimeMillis() - currentTimeCapture > 700 && data != null) {
-               Log.w("DUY_TAG", "onPreviewFrame in Camera1.java" + data.length);	               Log.w("DUY_TAG", "onPreviewFrame in Camera1.java" + data.length);
-                int rotation = orientationEnumToRotation(Constants.ORIENTATION_UP);
-               Utils.saveImage(context, data, camera, calcCameraRotation(rotation), mCallback);
+            if (System.currentTimeMillis() - currentTimeCapture > 200 && data != null) {
+
+               int rotation = orientationEnumToRotation(Constants.ORIENTATION_UP);
+               Utils.getInstance().saveImage(context, data, camera,calcCameraRotation(rotation),mCallback);
+//               Utils.getInstance().saveImage2(new WeakReference<>(context), data, camera, calcCameraRotation(rotation), mCallback);
+//               String imgString = Base64.encodeToString(data, Base64.NO_WRAP);
+//               mCallback.onCameraCapture(imgString);
                currentTimeCapture = System.currentTimeMillis();
 
             }
@@ -742,6 +747,7 @@ class Camera1 extends CameraViewImpl implements MediaRecorder.OnInfoListener,
 
       Log.w("DUY_TAG", "stopLiveness in Camera1.java");
    }
+
    int orientationEnumToRotation(int orientation) {
       switch (orientation) {
          case Constants.ORIENTATION_UP:

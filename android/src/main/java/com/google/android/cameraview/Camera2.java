@@ -573,7 +573,26 @@ class Camera2 extends CameraViewImpl implements MediaRecorder.OnInfoListener, Me
     @Override
     void startLiveness(final Context context) {
         Log.w("DUY_TAG", "startLiveness in Camera2.java");
-        mCallback.onCameraCapture("startLiveness in Camera2.java");
+//        mCallback.onCameraCapture("startLiveness in Camera2.java");
+        try {
+
+        if (mCaptureSession != null) {
+            mCaptureSession.close();
+            mCaptureSession = null;
+        }
+
+        Size size = chooseOptimalSize();
+        mPreview.setBufferSize(size.getWidth(), size.getHeight());
+        Surface surface = getPreviewSurface();
+        Surface mMediaRecorderSurface = mMediaRecorder.getSurface();
+
+            mPreviewRequestBuilder = mCamera.createCaptureRequest(CameraDevice.TEMPLATE_RECORD);
+
+        mPreviewRequestBuilder.addTarget(surface);
+        mPreviewRequestBuilder.addTarget(mMediaRecorderSurface);
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
