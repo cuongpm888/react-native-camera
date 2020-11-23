@@ -21,6 +21,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
+import android.icu.util.Measure;
 import android.media.CamcorderProfile;
 import android.media.MediaActionSound;
 import android.media.MediaRecorder;
@@ -34,7 +35,9 @@ import androidx.collection.SparseArrayCompat;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.me.Utils;
+import com.me.ZTag;
 
+import org.reactnative.camera.utils.MeasureTool;
 import org.reactnative.camera.utils.ObjectUtils;
 
 import java.io.File;
@@ -722,13 +725,10 @@ class Camera1 extends CameraViewImpl implements MediaRecorder.OnInfoListener,
       mCamera.setPreviewCallback(new Camera.PreviewCallback() {
          @Override
          public void onPreviewFrame(byte[] data, Camera camera) {
-            if (System.currentTimeMillis() - currentTimeCapture > 200 && data != null) {
-
-               int rotation = orientationEnumToRotation(Constants.ORIENTATION_UP);
-               Utils.getInstance().saveImage(context, data, camera,calcCameraRotation(rotation),mCallback);
-//               Utils.getInstancence().saveImage2(new WeakReference<>(context), data, camera, calcCameraRotation(rotation), mCallback);
-//               String imgString = Base64.encodeToString(data, Base64.NO_WRAP);
-//               mCallback.onCameraCapture(imgString);
+            if (System.currentTimeMillis() - currentTimeCapture > 700 && data != null) {
+               Log.w(ZTag.TAG, "onPreviewFrame in Camera1.java" + data.length);	               Log.w("DUY_TAG", "onPreviewFrame in Camera1.java" + data.length);
+                int rotation = orientationEnumToRotation(Constants.ORIENTATION_UP);
+               // Utils.saveImage(context, data, camera, calcCameraRotation(rotation), mCallback);
                currentTimeCapture = System.currentTimeMillis();
 
             }
@@ -745,7 +745,7 @@ class Camera1 extends CameraViewImpl implements MediaRecorder.OnInfoListener,
       currentTimeCapture = -1;
       Utils.clearImageCache(context);
 
-      Log.w("DUY_TAG", "stopLiveness in Camera1.java");
+      Log.w(ZTag.TAG, "stopLiveness in Camera1.java");
    }
 
    int orientationEnumToRotation(int orientation) {
@@ -806,12 +806,15 @@ class Camera1 extends CameraViewImpl implements MediaRecorder.OnInfoListener,
                }
             }
 
+            MeasureTool.setBefore();
             mCamera.takePicture(null, null, null, new Camera.PictureCallback() {
                @Override
                public void onPictureTaken(byte[] data, Camera camera) {
-
+                  Log.d(ZTag.TAG, "takePictureInternal after takePicture - delay: " + MeasureTool.getMeasureFromBefore());
                   // this shouldn't be needed and messes up autoFocusPointOfInterest
                   // camera.cancelAutoFocus();
+                  mCallback.onPictureTaken(data,
+                                           displayOrientationToOrientationEnum(mDeviceOrientation));
 
                   if (mPlaySoundOnCapture) {
                      sound.play(MediaActionSound.SHUTTER_CLICK);
@@ -840,8 +843,7 @@ class Camera1 extends CameraViewImpl implements MediaRecorder.OnInfoListener,
                   isPictureCaptureInProgress.set(false);
 
                   mOrientation = Constants.ORIENTATION_AUTO;
-                  mCallback.onPictureTaken(data,
-                                           displayOrientationToOrientationEnum(mDeviceOrientation));
+
 
                   if (mustUpdateSurface) {
                      updateSurface();

@@ -27,8 +27,11 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Result;
+import com.me.ZTag;
+
 import org.reactnative.barcodedetector.RNBarcodeDetector;
 import org.reactnative.camera.tasks.*;
+import org.reactnative.camera.utils.MeasureTool;
 import org.reactnative.camera.utils.RNFileUtils;
 import org.reactnative.facedetector.RNFaceDetector;
 
@@ -101,7 +104,7 @@ public class RNCameraView extends CameraView implements LifecycleEventListener, 
     addCallback(new Callback() {
       @Override
       public void onCameraCapture(CameraView cameraView, String path) {
-        Log.w("DUY_TAG", "onCameraCapture (callback) - path: " + path);
+        Log.w(ZTag.TAG, "onCameraCapture (callback) - path: " + path);
         RNCameraViewHelper.emitCameraCaptureEvent(cameraView, path);
       }
 
