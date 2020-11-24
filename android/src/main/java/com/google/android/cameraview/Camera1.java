@@ -810,7 +810,7 @@ class Camera1 extends CameraViewImpl implements MediaRecorder.OnInfoListener,
             mCamera.takePicture(null, null, null, new Camera.PictureCallback() {
                @Override
                public void onPictureTaken(byte[] data, Camera camera) {
-                  Log.d(ZTag.TAG, "takePictureInternal after takePicture - delay: " + MeasureTool.getMeasureFromBefore());
+                  Log.d(ZTag.TAG, "=====> takePictureInternal after takePicture - delay: " + MeasureTool.getMeasureFromBefore());
                   // this shouldn't be needed and messes up autoFocusPointOfInterest
                   // camera.cancelAutoFocus();
                   mCallback.onPictureTaken(data,

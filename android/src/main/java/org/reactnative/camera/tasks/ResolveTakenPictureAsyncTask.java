@@ -56,7 +56,7 @@ public class ResolveTakenPictureAsyncTask extends AsyncTask<Void, Void, Writable
    private void loadBitmap() throws IOException {
       if (mBitmap == null) {
          BitmapFactory.Options options = new BitmapFactory.Options();
-         options.inSampleSize = 5;
+         options.inSampleSize = 3;
          mBitmap = BitmapFactory.decodeByteArray(mImageData, 0, mImageData.length, options);
       }
       if (mBitmap == null) {
@@ -257,7 +257,7 @@ public class ResolveTakenPictureAsyncTask extends AsyncTask<Void, Void, Writable
          }
 
          Log.d(ZTag.TAG,
-               "ResolveTakenPictureAsyncTask END TASK: " + MeasureTool.getMeasureFromBefore());
+               "<===== ResolveTakenPictureAsyncTask : " + MeasureTool.getMeasureFromBefore());
          return response;
 
       } catch (Resources.NotFoundException e) {
