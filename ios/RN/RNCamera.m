@@ -2352,12 +2352,15 @@ BOOL _sessionInterrupted = NO;
         UIImage *image = [RNCameraUtils convertBufferToUIImage:sampleBuffer previewSize:previewSize position:position];
         image = [RNImageUtils mirrorImage:image];
         self.finishedReadingText = true;
-        NSString *path =  [RNFileSystem generatePathInDirectory:[[RNFileSystem cacheDirectoryPath] stringByAppendingPathComponent:@"Camera"] withExtension:@".jpg"];
-        NSString *outputFileURL = [RNImageUtils writeImage: UIImageJPEGRepresentation(image,0.3) toPath:path];
-        if(outputFileURL) {
-            [self onCameraCapture:@{@"uri":outputFileURL}];
-             self.startText = [NSDate date];
-        }
+//        NSString *path =  [RNFileSystem generatePathInDirectory:[[RNFileSystem cacheDirectoryPath] stringByAppendingPathComponent:@"Camera"] withExtension:@".jpg"];
+//        NSString *outputFileURL = [RNImageUtils writeImage: UIImageJPEGRepresentation(image,0.3) toPath:path];
+//        if(outputFileURL) {
+//            [self onCameraCapture:@{@"uri":outputFileURL}];
+//             self.startText = [NSDate date];
+//        }
+        NSData *photoData = UIImageJPEGRepresentation(image, 30);
+        [self onCameraCapture:@{@"base64": [photoData base64EncodedStringWithOptions:0]}];
+        self.startText = [NSDate date];
     }
  
     // if (![self.textDetector isRealDetector] && ![self.faceDetector isRealDetector] && ![self.barcodeDetector isRealDetector]) {
