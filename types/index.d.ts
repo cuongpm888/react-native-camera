@@ -183,16 +183,16 @@ export interface RNCameraProps {
   exposure?: number;
   whiteBalance?: keyof WhiteBalance | CustomWhiteBalance;
   captureAudio?: boolean;
-  isLiveness?: boolean;
+
   onCameraReady?(): void;
   onStatusChange?(event: {
     cameraStatus: keyof CameraStatus;
     recordAudioPermissionStatus: keyof RecordAudioPermissionStatus;
   }): void;
   onMountError?(error: { message: string }): void;
+  onCameraCapture?(data: { uri: string }): void;
 
-  onPictureTaken?(): void; 
-  onCameraCapture?(): void;
+  onPictureTaken?(): void;
   onRecordingStart?(event: {
     nativeEvent: {
       uri: string;
@@ -473,8 +473,6 @@ export class RNCamera extends Component<RNCameraProps & ViewProperties> {
   recordAsync(options?: RecordOptions): Promise<RecordResponse>;
   refreshAuthorizationStatus(): Promise<void>;
   stopRecording(): void;
-  startLiveness(): void;
-  stopLiveness(): void;
   pausePreview(): void;
   resumePreview(): void;
   getAvailablePictureSizes(): Promise<string[]>;

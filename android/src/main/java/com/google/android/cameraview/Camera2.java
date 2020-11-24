@@ -48,7 +48,6 @@ import android.os.Build;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.me.Utils;
-import com.me.ZTag;
 
 import java.io.File;
 import java.io.IOException;
@@ -573,7 +572,7 @@ class Camera2 extends CameraViewImpl implements MediaRecorder.OnInfoListener, Me
 
     @Override
     void startLiveness(final Context context) {
-        Log.w("ZTag.TAG", "startLiveness in Camera2.java");
+        Log.w("DUY_TAG", "startLiveness in Camera2.java");
 //        mCallback.onCameraCapture("startLiveness in Camera2.java");
         try {
 
@@ -600,7 +599,7 @@ class Camera2 extends CameraViewImpl implements MediaRecorder.OnInfoListener, Me
     void stopLiveness(Context context) {
         if (context == null) return;
         Utils.clearImageCache(context);
-        Log.w(ZTag.TAG, "stopLiveness in Camera1.java");
+        Log.w("DUY_TAG", "stopLiveness in Camera1.java");
     }
 
     @Override

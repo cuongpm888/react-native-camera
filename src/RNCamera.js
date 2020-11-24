@@ -258,7 +258,7 @@ type PropsType = typeof View.props & {
   onStatusChange?: Function,
   onBarCodeRead?: Function,
   onPictureTaken?: Function,
-  onCameraCapture?: Function,
+  onCameraCapture?: Function, //Duy - Camera Capture
   onPictureSaved?: Function,
   onRecordingStart?: Function,
   onRecordingEnd?: Function,
@@ -281,7 +281,6 @@ type PropsType = typeof View.props & {
   onFacesDetected?: ({ faces: Array<TrackedFaceFeature> }) => void,
   onTextRecognized?: ({ textBlocks: Array<TrackedTextFeature> }) => void,
   captureAudio?: boolean,
-  isLiveness?: boolean,
   keepAudioSession?: boolean,
   useCamera2Api?: boolean,
   playSoundOnCapture?: boolean,
@@ -401,13 +400,13 @@ export default class Camera extends React.Component<PropsType, StateType> {
     ratio: PropTypes.string,
     focusDepth: PropTypes.number,
     onMountError: PropTypes.func,
+    onCameraCapture: PropTypes.func,
     onCameraReady: PropTypes.func,
     onAudioInterrupted: PropTypes.func,
     onAudioConnected: PropTypes.func,
     onStatusChange: PropTypes.func,
     onBarCodeRead: PropTypes.func,
     onPictureTaken: PropTypes.func,
-    onCameraCapture: PropTypes.func,
     onPictureSaved: PropTypes.func,
     onRecordingStart: PropTypes.func,
     onRecordingEnd: PropTypes.func,
@@ -442,7 +441,6 @@ export default class Camera extends React.Component<PropsType, StateType> {
     notAuthorizedView: PropTypes.element,
     pendingAuthorizationView: PropTypes.element,
     captureAudio: PropTypes.bool,
-    isLiveness: PropTypes.bool,
     keepAudioSession: PropTypes.bool,
     useCamera2Api: PropTypes.bool,
     playSoundOnCapture: PropTypes.bool,
@@ -487,7 +485,6 @@ export default class Camera extends React.Component<PropsType, StateType> {
         <ActivityIndicator size="small" />
       </View>
     ),
-    isLiveness: false,
     captureAudio: true,
     keepAudioSession: false,
     useCamera2Api: false,
@@ -545,6 +542,16 @@ export default class Camera extends React.Component<PropsType, StateType> {
     }
 
     return await CameraManager.takePicture(options, this._cameraHandle);
+  }
+
+  async startLiveness() {
+    console.log("startLiveness in RNCamera.js");
+    return await CameraManager.startLiveness(this._cameraHandle);
+  }
+
+  async stopLiveness() {
+    console.log("stopLiveness in RNCamera.js");
+    return await CameraManager.stopLiveness(this._cameraHandle);
   }
 
   async getSupportedRatiosAsync() {
@@ -629,14 +636,6 @@ export default class Camera extends React.Component<PropsType, StateType> {
     CameraManager.stopRecording(this._cameraHandle);
   }
 
-  startLiveness() {
-    CameraManager.startLiveness(this._cameraHandle);
-  }
-
-  stopLiveness() {
-    CameraManager.stopLiveness(this._cameraHandle);
-  }
-
   pauseRecording() {
     CameraManager.pauseRecording(this._cameraHandle);
   }
@@ -663,15 +662,15 @@ export default class Camera extends React.Component<PropsType, StateType> {
     }
   };
 
-  _onCameraReady = () => {
-    if (this.props.onCameraReady) {
-      this.props.onCameraReady();
+  _onCameraCampture = ({ nativeEvent }: EventCallbackArgumentsType) => {
+    if (this.props.onCameraCapture) {
+      this.props.onCameraCapture(nativeEvent);
     }
   };
 
-  _onCameraCapture = ({ nativeEvent }: EventCallbackArgumentsType) => {
-    if (this.props.onCameraCapture) {
-      this.props.onCameraCapture(nativeEvent);
+  _onCameraReady = () => {
+    if (this.props.onCameraReady) {
+      this.props.onCameraReady();
     }
   };
 
@@ -855,8 +854,8 @@ export default class Camera extends React.Component<PropsType, StateType> {
             style={StyleSheet.absoluteFill}
             ref={this._setReference}
             onMountError={this._onMountError}
+            onCameraCapture = {this._onCameraCampture}
             onCameraReady={this._onCameraReady}
-            onCameraCapture={this._onCameraCapture}
             onAudioInterrupted={this._onAudioInterrupted}
             onAudioConnected={this._onAudioConnected}
             onGoogleVisionBarcodesDetected={this._onObjectDetected(
@@ -941,6 +940,8 @@ const RNCamera = requireNativeComponent('RNCamera', Camera, {
     onTouch: true,
     onLayout: true,
     onMountError: true,
+    onCameraCapture: true,
+    onCameraCapture: true,
     onSubjectAreaChanged: true,
     renderToHardwareTextureAndroid: true,
     testID: true,

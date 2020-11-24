@@ -42,16 +42,16 @@ public class Utils implements Handler.Callback {
    }
 
    public void saveImage(Context context, byte[] data, Camera camera,
-                                int rotateAngle, CameraViewImpl.Callback mCallback) {
+                         int rotateAngle, CameraViewImpl.Callback mCallback) {
       SavePhotoAsyncTask task = new SavePhotoAsyncTask(context, data, camera, rotateAngle,
-                                                       mCallback);
+              mCallback);
       task.execute();
    }
 
    public void saveImage2(WeakReference<Context> context, byte[] data, Camera camera,
                           int rotateAngle, CameraViewImpl.Callback mCallback) {
       sendMessageToHandler(MSG_SAVE_IMAGE,
-                           new SaveImageHolder(context, data, camera, rotateAngle, mCallback));
+              new SaveImageHolder(context, data, camera, rotateAngle, mCallback));
    }
 
 
@@ -66,7 +66,7 @@ public class Utils implements Handler.Callback {
       int what = msg.what;
       switch (what) {
          case MSG_SAVE_IMAGE:
-            Log.w("DUY_TAG", "onPreviewFrame in Camera1.java " + System.currentTimeMillis());
+
             WeakReference<Bitmap> bitmap;
             SaveImageHolder saveData = (SaveImageHolder) msg.obj;
 
@@ -81,7 +81,7 @@ public class Utils implements Handler.Callback {
             Camera.Size size = parameters.getPreviewSize();
 
             YuvImage image = new YuvImage(data, ImageFormat.NV21,
-                                          size.width, size.height, null);
+                    size.width, size.height, null);
             Rect rectangle = new Rect();
             rectangle.bottom = size.height;
             rectangle.top = 0;
@@ -108,6 +108,7 @@ public class Utils implements Handler.Callback {
                Log.e("PictureDemo", "Exception in photoCallback", e);
             }
 
+            Log.w("DUY_TAG", "MSG_SAVE_IMAGE in Utils.java - path saved: " + photo.getPath());
             mCallback.onCameraCapture(photo.getPath());
             bitmap.clear();
 
@@ -158,7 +159,7 @@ public class Utils implements Handler.Callback {
          Camera.Size size = parameters.getPreviewSize();
 
          YuvImage image = new YuvImage(data, ImageFormat.NV21,
-                                       size.width, size.height, null);
+                 size.width, size.height, null);
          Rect rectangle = new Rect();
          rectangle.bottom = size.height;
          rectangle.top = 0;
@@ -168,7 +169,9 @@ public class Utils implements Handler.Callback {
          image.compressToJpeg(rectangle, 30, out2);
          byte[] imageBytes = out2.toByteArray();
 
-         bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+         BitmapFactory.Options options = new BitmapFactory.Options();
+         options.inSampleSize = 3;
+         bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length, options);
          bitmap = rotateBitmap(bitmap, rotateAngle);
 
          File directory = getCacheDir(context.get());
@@ -225,7 +228,7 @@ public class Utils implements Handler.Callback {
       Matrix matrix = new Matrix();
       matrix.postRotate(angle);
       return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix,
-                                 true);
+              true);
    }
    private static WeakReference<Bitmap> rotateBitmap2(ByteArrayOutputStream out2, float angle) {
       byte[] imageBytes = out2.toByteArray();
@@ -233,10 +236,11 @@ public class Utils implements Handler.Callback {
       Matrix matrix = new Matrix();
       matrix.postRotate(angle);
       return new WeakReference<>(Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix,
-                                                     true));
+              true));
    }
 
 
 
 
 }
+
